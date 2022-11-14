@@ -41,16 +41,23 @@ router.post("/", async (req, res) => {
 	res.json(todo);
 });
 
-//update a todo
-router.put("/:id", async (req, res, next) => {
-	try {
-		const todo = await db()
-			.collection("todos")
-			.updateOne({ _id: req.params.id }, { $set: req.body });
-		res.json(todo);
-	} catch (err) {
-		console.log(err);
-	}
+//update a todo to completed = true
+router.put("/:id", async (req, res) => {
+	const { id } = req.params;
+
+	await db()
+		.collection("todos")
+		.updateOne(
+			{ _id: id },
+			{
+				$set: {
+					completed: true,
+				},
+			}
+		);
+	res.json({
+		success: true,
+	});
 });
 
 //delete a todo
